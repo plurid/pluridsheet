@@ -33,8 +33,8 @@
         "npm": ">=6"
     },
     "scripts": {
-        "storybook": "start-storybook -p 9001 -c storybook",
-        "build.storybook": "build-storybook -c storybook",
+        "storybook": "start-storybook -p 6006",
+        "build.storybook": "build-storybook",
         "test": "jest -c ./configurations/jest.config.js",
         "lint": "eslint -c ./configurations/.eslintrc.js ./source/index.ts",
         "clean": "rm -rf ./distribution",
@@ -80,6 +80,7 @@
         "@plurid/plurid-ui-components-react": "^0.0.0-6",
         "@plurid/plurid-ui-state-react": "^0.0.0-2",
         "@storybook/addon-actions": "^6.3.12",
+        "@storybook/addon-essentials": "^6.3.12",
         "@storybook/addon-info": "^5.3.21",
         "@storybook/addon-knobs": "^6.3.1",
         "@storybook/addon-links": "^6.3.12",
