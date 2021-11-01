@@ -6,10 +6,15 @@
         plurid,
         Theme,
     } from '@plurid/plurid-themes';
+
+    import {
+        PluridApplication,
+    } from '@plurid/plurid-react';
     // #endregion libraries
 
 
     // #region external
+    import PluridsheetPlane from '~components/PluridsheetPlane';
     // #endregion external
 
 
@@ -74,7 +79,17 @@ const Pluridsheet: React.FC<PluridsheetProperties> = (
         <StyledPluridsheet
             theme={theme}
         >
-
+            <PluridApplication
+                planes={[
+                    {
+                        route: '/pluridsheet/:id',
+                        component: PluridsheetPlane,
+                    },
+                ]}
+                view={[
+                    '/pluridsheet/1',
+                ]}
+            />
         </StyledPluridsheet>
     );
     // #endregion render
