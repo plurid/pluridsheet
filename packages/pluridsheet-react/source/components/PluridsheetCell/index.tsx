@@ -1,26 +1,22 @@
 // #region imports
     // #region libraries
-    import React from 'react';
+    import React, {
+        useState,
+    } from 'react';
 
     import {
-        plurid,
         Theme,
     } from '@plurid/plurid-themes';
-
-    import {
-        PluridApplication,
-    } from '@plurid/plurid-react';
     // #endregion libraries
 
 
     // #region external
-    import PluridsheetPlane from '~components/PluridsheetPlane';
     // #endregion external
 
 
     // #region internal
     import {
-        StyledPluridsheet,
+        StyledPluridsheetCell,
     } from './styled';
     // #endregion internal
 // #region imports
@@ -28,18 +24,21 @@
 
 
 // #region module
-export interface PluridsheetProperties {
+export interface PluridsheetCellProperties {
     // #region required
         // #region values
+        location: string
+        theme: Theme;
         // #endregion values
 
         // #region methods
+        getValue: () => string;
+        setValue: (value: string) => void;
         // #endregion methods
     // #endregion required
 
     // #region optional
         // #region values
-        theme?: Theme;
         // #endregion values
 
         // #region methods
@@ -47,59 +46,56 @@ export interface PluridsheetProperties {
     // #endregion optional
 }
 
-const Pluridsheet: React.FC<PluridsheetProperties> = (
+const PluridsheetCell: React.FC<PluridsheetCellProperties> = (
     properties,
 ) => {
     // #region properties
     const {
         // #region required
             // #region values
+            location,
+            theme,
             // #endregion values
 
             // #region methods
+            getValue,
+            setValue,
             // #endregion methods
         // #endregion required
 
         // #region optional
             // #region values
-            theme: themeProperty,
             // #endregion values
 
             // #region methods
             // #endregion methods
         // #endregion optional
     } = properties;
-
-    const theme = themeProperty || plurid;
     // #endregion properties
+
+
+    // #region state
+    const [
+        localValue,
+        setLocalValue,
+    ] = useState(getValue());
+    // #endregion state
 
 
     // #region render
     return (
-        <StyledPluridsheet
+        <StyledPluridsheetCell
             theme={theme}
         >
-            <PluridApplication
-                planes={[
-                    {
-                        route: '/pluridsheet/:id',
-                        component: PluridsheetPlane,
-                    },
-                ]}
-                view={[
-                    '/pluridsheet/1',
-                ]}
-                configuration={{
-                    elements: {
-                        plane: {
-                            controls: {
-                                show: false,
-                            },
-                        },
-                    },
+            <input
+                value={localValue}
+                placeholder={location}
+                onChange={(event) => {
+                    setValue(event.target.value);
+                    setLocalValue(getValue);
                 }}
             />
-        </StyledPluridsheet>
+        </StyledPluridsheetCell>
     );
     // #endregion render
 }
@@ -108,5 +104,5 @@ const Pluridsheet: React.FC<PluridsheetProperties> = (
 
 
 // #region exports
-export default Pluridsheet;
+export default PluridsheetCell;
 // #endregion exports

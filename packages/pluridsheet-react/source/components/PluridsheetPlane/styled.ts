@@ -16,5 +16,13 @@ export interface IStyledPluridsheetPlane {
 }
 
 export const StyledPluridsheetPlane = styled.div<IStyledPluridsheetPlane>`
+    font-family: 'Ubuntu';
+    display: flex;
+`;
+
+
+export const StyledPluridsheetRow = styled.div`
+    display: flex;
+    flex-direction: column;
 `;
 // #region module

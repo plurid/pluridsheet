@@ -20,6 +20,7 @@ export type PluridsheetCellChange = PluridsheetCellLocation & {
 export type PluridsheetCellData = PluridsheetCellLocation & {
     value: string | number;
     display: string;
+    resolved: boolean;
 }
 
 export type PluridsheetRows = Record<string, PluridsheetCellData>;
@@ -46,41 +47,52 @@ class PluridsheetEngine {
         const parser = new PluridsheetFormularParser(value);
         const formula = parser.parse();
         if (!formula) {
-            return '';
+            return {
+                resolved: false,
+                display: '',
+            };
         }
 
         let formulaValue = 0;
+        let resolved = false;
 
         switch (formula.type) {
             case '*': {
                 const left = this.getCell(formula.left as any);
                 const right = this.getCell(formula.right as any);
                 formulaValue += (left.value as any) * (right.value as any);
+                resolved = true;
                 break;
             }
             case '/': {
                 const left = this.getCell(formula.left as any);
                 const right = this.getCell(formula.right as any);
                 formulaValue += (left.value as any) / (right.value as any);
+                resolved = true;
                 break;
             }
             case '+': {
                 const left = this.getCell(formula.left as any);
                 const right = this.getCell(formula.right as any);
                 formulaValue += (left.value as any) + (right.value as any);
+                resolved = true;
                 break;
             }
             case '-': {
                 const left = this.getCell(formula.left as any);
                 const right = this.getCell(formula.right as any);
                 formulaValue += (left.value as any) - (right.value as any);
+                resolved = true;
                 break;
             }
             case 'v':
                 break;
         }
 
-        return formulaValue + '';
+        return {
+            resolved,
+            display: formulaValue + '',
+        };
     }
 
 
@@ -102,9 +114,11 @@ class PluridsheetEngine {
             this.value[z][y] = {};
         }
 
+        const resolve = this.resolveValue(value);
+
         this.value[z][y][x] = {
             ...data,
-            display: this.resolveValue(value),
+            ...resolve,
         };
     }
 
@@ -122,9 +136,11 @@ class PluridsheetEngine {
 
                 const cell = this.value[z][y][x];
 
+                const resolve = this.resolveValue(cell.value);
+
                 return {
                     ...cell,
-                    display: this.resolveValue(cell.value),
+                    ...resolve,
                 };
             }
 
@@ -135,10 +151,11 @@ class PluridsheetEngine {
             } = location;
 
             const cell = this.value[z][y][x];
+            const resolve = this.resolveValue(cell.value);
 
             return {
                 ...cell,
-                display: this.resolveValue(cell.value),
+                ...resolve,
             };
         } catch (error) {
             return {
@@ -147,6 +164,7 @@ class PluridsheetEngine {
                 y: '',
                 value: '',
                 display: '',
+                resolved: false,
             };
         }
     }
@@ -155,7 +173,10 @@ class PluridsheetEngine {
         value: string | number,
     ) {
         if (typeof value !== 'string') {
-            return value + '';
+            return {
+                resolved: true,
+                display: value + '',
+            };
         }
 
         if (value.trim().startsWith('=')) {
@@ -164,7 +185,10 @@ class PluridsheetEngine {
             );
         }
 
-        return value + '';
+        return {
+            resolved: true,
+            display: value + '',
+        };
     }
 }
 // #endregion module
