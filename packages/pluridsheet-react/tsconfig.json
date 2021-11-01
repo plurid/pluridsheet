@@ -14,6 +14,9 @@
             "~components/*": [
                 "./source/components/*"
             ],
+            "~logic/*": [
+                "./source/logic/*"
+            ],
             "~utilities/*": [
                 "./source/utilities/*"
             ],

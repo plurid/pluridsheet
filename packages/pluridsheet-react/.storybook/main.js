@@ -22,6 +22,7 @@ module.exports = {
             "~data": path.resolve(__dirname, "../source/data"),
             "~components": path.resolve(__dirname, "../source/components"),
             "~utilities": path.resolve(__dirname, "../source/utilities"),
+            "~logic": path.resolve(__dirname, "../source/logic"),
         };
 
         return config;
