@@ -74,8 +74,6 @@ const PluridsheetPlane: React.FC<PluridsheetPlaneProperties> = (
                         {rows.map((row) => {
                             const cellName = `1${column}${row}`;
 
-                            const value = pluridsheetEngine.getCell(cellName).display;
-
                             return (
                                 <PluridsheetCell
                                     key={`cell-${column}-${row}`}
@@ -83,6 +81,10 @@ const PluridsheetPlane: React.FC<PluridsheetPlaneProperties> = (
                                     theme={plurid}
 
                                     getValue={() => {
+                                        const cell = pluridsheetEngine.getCell(cellName);
+                                        return cell.value as string;
+                                    }}
+                                    getDisplay={() => {
                                         const cell = pluridsheetEngine.getCell(cellName);
 
                                         if (typeof cell.value === 'string') {

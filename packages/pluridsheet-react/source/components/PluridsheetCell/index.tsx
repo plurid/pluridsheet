@@ -33,6 +33,7 @@ export interface PluridsheetCellProperties {
 
         // #region methods
         getValue: () => string;
+        getDisplay: () => string;
         setValue: (value: string) => void;
         // #endregion methods
     // #endregion required
@@ -59,6 +60,7 @@ const PluridsheetCell: React.FC<PluridsheetCellProperties> = (
 
             // #region methods
             getValue,
+            getDisplay,
             setValue,
             // #endregion methods
         // #endregion required
@@ -90,9 +92,15 @@ const PluridsheetCell: React.FC<PluridsheetCellProperties> = (
             <input
                 value={localValue}
                 placeholder={location}
+                onBlur={() => {
+                    setLocalValue(getDisplay());
+                }}
+                onFocus={() => {
+                    setLocalValue(getValue());
+                }}
                 onChange={(event) => {
                     setValue(event.target.value);
-                    setLocalValue(getValue);
+                    setLocalValue(getValue());
                 }}
             />
         </StyledPluridsheetCell>
