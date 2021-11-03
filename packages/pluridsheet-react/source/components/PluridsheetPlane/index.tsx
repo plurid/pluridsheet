@@ -1,18 +1,33 @@
 // #region imports
     // #region libraries
-    import React from 'react';
+    import React, {
+        useState,
+    } from 'react';
 
     import {
         plurid,
         Theme,
     } from '@plurid/plurid-themes';
+
+    import {
+        PluridIconAdd,
+    } from '@plurid/plurid-icons-react';
     // #endregion libraries
 
 
     // #region external
+    import {
+        defaultColumns,
+        defaultRows,
+    } from '~data/constants';
+
     import PluridsheetCell from '~components/PluridsheetCell';
 
     import PluridsheetEngine from '~logic/PluridsheetEngine';
+
+    import {
+        numberToLetterColumn,
+    } from '~utilities/index';
     // #endregion external
 
 
@@ -55,10 +70,49 @@ const PluridsheetPlane: React.FC<PluridsheetPlaneProperties> = (
             // #endregion methods
         // #endregion required
     } = properties;
-
-    const columns = ['A', 'B', 'C', 'D'];
-    const rows = ['1', '2', '3', '4'];
     // #endregion properties
+
+
+    // #region state
+    const [
+        columns,
+        setColumns,
+    ] = useState([
+        ...defaultColumns,
+    ]);
+
+    const [
+        rows,
+        setRows,
+    ] = useState([
+        ...defaultRows,
+    ]);
+    // #endregion state
+
+
+    // #region handlers
+    const addColumn = () => {
+        const nextColumnIndex = (columns.length + 1);
+        const nextColumn = numberToLetterColumn(nextColumnIndex);
+        if (!nextColumn) {
+            return;
+        }
+
+        setColumns(columns => [
+            ...columns,
+            nextColumn,
+        ]);
+    }
+
+    const addRow = () => {
+        const nextRow = (rows.length + 1) + '';
+
+        setRows(rows => [
+            ...rows,
+            nextRow,
+        ]);
+    }
+    // #endregion handlers
 
 
     // #region render
@@ -113,6 +167,18 @@ const PluridsheetPlane: React.FC<PluridsheetPlaneProperties> = (
                     </StyledPluridsheetRow>
                 );
             })}
+
+            <div>
+                <PluridIconAdd
+                    title="add column"
+                    atClick={addColumn}
+                />
+
+                <PluridIconAdd
+                    title="add row"
+                    atClick={addRow}
+                />
+            </div>
         </StyledPluridsheetPlane>
     );
     // #endregion render
