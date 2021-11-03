@@ -34,6 +34,7 @@
     // #region internal
     import {
         StyledPluridsheetPlane,
+        StyledPluridsheetArea,
         StyledPluridsheetRow,
     } from './styled';
     // #endregion internal
@@ -63,13 +64,15 @@ const PluridsheetPlane: React.FC<PluridsheetPlaneProperties> = (
     const {
         // #region required
             // #region values
-            theme,
+            theme: themeProperty,
             // #endregion values
 
             // #region methods
             // #endregion methods
         // #endregion required
     } = properties;
+
+    const theme = themeProperty || plurid;
     // #endregion properties
 
 
@@ -120,63 +123,75 @@ const PluridsheetPlane: React.FC<PluridsheetPlaneProperties> = (
         <StyledPluridsheetPlane
             theme={theme}
         >
-            {columns.map((column) => {
-                return (
-                    <StyledPluridsheetRow
-                        key={`column-${column}`}
-                    >
-                        {rows.map((row) => {
-                            const cellName = `1${column}${row}`;
+            <StyledPluridsheetArea
+                theme={theme}
+            >
+                {columns.map((column) => {
+                    return (
+                        <StyledPluridsheetRow
+                            key={`column-${column}`}
+                        >
+                            {rows.map((row) => {
+                                const cellName = `1${column}${row}`;
 
-                            return (
-                                <PluridsheetCell
-                                    key={`cell-${column}-${row}`}
-                                    location={column + row}
-                                    theme={plurid}
+                                return (
+                                    <PluridsheetCell
+                                        key={`cell-${column}-${row}`}
+                                        location={column + row}
+                                        theme={plurid}
 
-                                    getValue={() => {
-                                        const cell = pluridsheetEngine.getCell(cellName);
-                                        return cell.value as string;
-                                    }}
-                                    getDisplay={() => {
-                                        const cell = pluridsheetEngine.getCell(cellName);
+                                        getValue={() => {
+                                            const cell = pluridsheetEngine.getCell(cellName);
+                                            return cell.value as string;
+                                        }}
+                                        getDisplay={() => {
+                                            const cell = pluridsheetEngine.getCell(cellName);
 
-                                        if (typeof cell.value === 'string') {
-                                            if (cell.resolved && cell.value.startsWith('=')) {
-                                                return cell.display;
+                                            if (typeof cell.value === 'string') {
+                                                if (cell.resolved && cell.value.startsWith('=')) {
+                                                    return cell.display;
+                                                }
                                             }
-                                        }
 
-                                        return cell.value as string;
-                                    }}
-                                    setValue={(value) => {
-                                        const parsedValue = parseInt(value)
-                                            ? parseInt(value)
-                                            : value;
+                                            return cell.value as string;
+                                        }}
+                                        setValue={(value) => {
+                                            const parsedValue = parseInt(value)
+                                                ? parseInt(value)
+                                                : value;
 
-                                        pluridsheetEngine.setCell({
-                                            z: '1',
-                                            y: column,
-                                            x: row,
-                                            value: parsedValue,
-                                        });
-                                    }}
-                                />
-                            );
-                        })}
-                    </StyledPluridsheetRow>
-                );
-            })}
+                                            pluridsheetEngine.setCell({
+                                                z: '1',
+                                                y: column,
+                                                x: row,
+                                                value: parsedValue,
+                                            });
+                                        }}
+                                    />
+                                );
+                            })}
+                        </StyledPluridsheetRow>
+                    );
+                })}
+            </StyledPluridsheetArea>
 
-            <div>
-                <PluridIconAdd
-                    title="add column"
-                    atClick={addColumn}
-                />
-
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    justifyContent: 'center',
+                    justifyItems: 'center',
+                    padding: '1rem',
+                }}
+            >
                 <PluridIconAdd
                     title="add row"
                     atClick={addRow}
+                />
+
+                <PluridIconAdd
+                    title="add column"
+                    atClick={addColumn}
                 />
             </div>
         </StyledPluridsheetPlane>

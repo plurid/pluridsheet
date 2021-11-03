@@ -17,7 +17,32 @@ export interface IStyledPluridsheetPlane {
 
 export const StyledPluridsheetPlane = styled.div<IStyledPluridsheetPlane>`
     font-family: 'Ubuntu';
+    padding: 2rem;
+    display: grid;
+`;
+
+
+export interface IStyledPluridsheetArea {
+    theme: Theme;
+}
+
+export const StyledPluridsheetArea = styled.div<IStyledPluridsheetArea>`
     display: flex;
+    max-width: 800px;
+    max-height: 400px;
+    overflow: scroll;
+    padding: 1.5rem;
+
+    background-color: ${
+        ({
+            theme,
+        }: IStyledPluridsheetArea) => theme.backgroundColorTertiary
+    };
+    box-shadow: ${
+        ({
+            theme,
+        }: IStyledPluridsheetArea) => theme.boxShadowAntumbraInset
+    };
 `;
 
 
