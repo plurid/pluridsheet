@@ -49,5 +49,6 @@ export const StyledPluridsheetArea = styled.div<IStyledPluridsheetArea>`
 export const StyledPluridsheetRow = styled.div`
     display: flex;
     flex-direction: column;
+    padding-bottom: 2rem;
 `;
 // #region module

@@ -126,51 +126,96 @@ const PluridsheetPlane: React.FC<PluridsheetPlaneProperties> = (
             <StyledPluridsheetArea
                 theme={theme}
             >
-                {columns.map((column) => {
+                <StyledPluridsheetRow>
+                    <div
+                        style={{
+                            textAlign: 'center',
+                            padding: '1rem',
+                        }}
+                    />
+
+                    {rows.map((row) => {
+                        return (
+                            <div
+                                key={`header-rows-${row}`}
+                                style={{
+                                    textAlign: 'right',
+                                    padding: '1rem',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'right',
+                                }}
+                            >
+                                {row}
+                            </div>
+                        );
+                    })}
+                </StyledPluridsheetRow>
+
+                {columns.map((column, index) => {
+                    const lastColumn = index === columns.length - 1;
+
                     return (
-                        <StyledPluridsheetRow
+                        <div
                             key={`column-${column}`}
+                            style={{
+                                paddingRight: lastColumn ? '1.5rem' : undefined,
+                            }}
                         >
-                            {rows.map((row) => {
-                                const cellName = `1${column}${row}`;
+                            <div
+                                key={`header-column-${column}`}
+                                style={{
+                                    textAlign: 'center',
+                                    padding: '0.5rem',
+                                }}
+                            >
+                                {column}
+                            </div>
 
-                                return (
-                                    <PluridsheetCell
-                                        key={`cell-${column}-${row}`}
-                                        location={column + row}
-                                        theme={plurid}
+                            <StyledPluridsheetRow
+                                // key={`column-${column}`}
+                            >
+                                {rows.map((row) => {
+                                    const cellName = `1${column}${row}`;
 
-                                        getValue={() => {
-                                            const cell = pluridsheetEngine.getCell(cellName);
-                                            return cell.value as string;
-                                        }}
-                                        getDisplay={() => {
-                                            const cell = pluridsheetEngine.getCell(cellName);
+                                    return (
+                                        <PluridsheetCell
+                                            key={`cell-${column}-${row}`}
+                                            location={column + row}
+                                            theme={plurid}
 
-                                            if (typeof cell.value === 'string') {
-                                                if (cell.resolved && cell.value.startsWith('=')) {
-                                                    return cell.display;
+                                            getValue={() => {
+                                                const cell = pluridsheetEngine.getCell(cellName);
+                                                return cell.value as string;
+                                            }}
+                                            getDisplay={() => {
+                                                const cell = pluridsheetEngine.getCell(cellName);
+
+                                                if (typeof cell.value === 'string') {
+                                                    if (cell.resolved && cell.value.startsWith('=')) {
+                                                        return cell.display;
+                                                    }
                                                 }
-                                            }
 
-                                            return cell.value as string;
-                                        }}
-                                        setValue={(value) => {
-                                            const parsedValue = parseInt(value)
-                                                ? parseInt(value)
-                                                : value;
+                                                return cell.value as string;
+                                            }}
+                                            setValue={(value) => {
+                                                const parsedValue = parseInt(value)
+                                                    ? parseInt(value)
+                                                    : value;
 
-                                            pluridsheetEngine.setCell({
-                                                z: '1',
-                                                y: column,
-                                                x: row,
-                                                value: parsedValue,
-                                            });
-                                        }}
-                                    />
-                                );
-                            })}
-                        </StyledPluridsheetRow>
+                                                pluridsheetEngine.setCell({
+                                                    z: '1',
+                                                    y: column,
+                                                    x: row,
+                                                    value: parsedValue,
+                                                });
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </StyledPluridsheetRow>
+                        </div>
                     );
                 })}
             </StyledPluridsheetArea>
