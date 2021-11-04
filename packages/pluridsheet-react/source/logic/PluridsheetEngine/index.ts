@@ -1,6 +1,10 @@
 // #region imports
     // #region external
     import PluridsheetFormularParser from '../PluridsheetFormularParser';
+
+    import {
+        getLocationsFromString,
+    } from '~utilities/index';
     // #endregion external
 // #endregion imports
 
@@ -127,12 +131,12 @@ class PluridsheetEngine {
     ): PluridsheetCellData {
         try {
             if (typeof location === 'string') {
-                const locations = location.trim().split('');
-                const [
+                const locations = getLocationsFromString(location.trim());
+                const {
                     z,
                     y,
                     x,
-                ] = locations;
+                } = locations;
 
                 const cell = this.value[z][y][x];
 
