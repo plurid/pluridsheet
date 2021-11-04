@@ -27,14 +27,18 @@
 export interface PluridsheetCellProperties {
     // #region required
         // #region values
+        name: string;
         location: string
         theme: Theme;
+        formulaMode: boolean;
+        inputCell: boolean;
         // #endregion values
 
         // #region methods
         getValue: () => string;
         getDisplay: () => string;
         setValue: (value: string) => void;
+        selectCell: () => void;
         // #endregion methods
     // #endregion required
 
@@ -54,14 +58,18 @@ const PluridsheetCell: React.FC<PluridsheetCellProperties> = (
     const {
         // #region required
             // #region values
+            // name,
             location,
             theme,
+            formulaMode,
+            inputCell,
             // #endregion values
 
             // #region methods
             getValue,
             getDisplay,
             setValue,
+            selectCell,
             // #endregion methods
         // #endregion required
 
@@ -88,6 +96,12 @@ const PluridsheetCell: React.FC<PluridsheetCellProperties> = (
     return (
         <StyledPluridsheetCell
             theme={theme}
+            onClick={(event) => {
+                if (!inputCell && formulaMode) {
+                    event.preventDefault();
+                    selectCell();
+                }
+            }}
         >
             <input
                 value={localValue}
@@ -102,6 +116,7 @@ const PluridsheetCell: React.FC<PluridsheetCellProperties> = (
                     setValue(event.target.value);
                     setLocalValue(getValue());
                 }}
+                disabled={!inputCell && formulaMode}
             />
         </StyledPluridsheetCell>
     );

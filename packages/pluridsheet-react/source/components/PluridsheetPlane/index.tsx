@@ -73,10 +73,22 @@ const PluridsheetPlane: React.FC<PluridsheetPlaneProperties> = (
     } = properties;
 
     const theme = themeProperty || plurid;
+
+    const sheetID = '1';
     // #endregion properties
 
 
     // #region state
+    const [
+        formulaMode,
+        setFormulaMode,
+    ] = useState(false);
+
+    const [
+        inputCell,
+        setInputCell,
+    ] = useState('');
+
     const [
         columns,
         setColumns,
@@ -172,23 +184,27 @@ const PluridsheetPlane: React.FC<PluridsheetPlaneProperties> = (
                                 {column}
                             </div>
 
-                            <StyledPluridsheetRow
-                                // key={`column-${column}`}
-                            >
+                            <StyledPluridsheetRow>
                                 {rows.map((row) => {
-                                    const cellName = `1${column}${row}`;
+                                    const cellName = sheetID + column + row;
 
                                     return (
                                         <PluridsheetCell
                                             key={`cell-${column}-${row}`}
+                                            name={cellName}
                                             location={column + row}
                                             theme={plurid}
+                                            formulaMode={formulaMode}
+                                            inputCell={inputCell === cellName}
 
                                             getValue={() => {
                                                 const cell = pluridsheetEngine.getCell(cellName);
                                                 return cell.value as string;
                                             }}
                                             getDisplay={() => {
+                                                // setFormulaMode(false);
+                                                // setInputCell('');
+
                                                 const cell = pluridsheetEngine.getCell(cellName);
 
                                                 if (typeof cell.value === 'string') {
@@ -200,6 +216,11 @@ const PluridsheetPlane: React.FC<PluridsheetPlaneProperties> = (
                                                 return cell.value as string;
                                             }}
                                             setValue={(value) => {
+                                                if (value.trim().startsWith('=')) {
+                                                    setFormulaMode(true);
+                                                    setInputCell(cellName);
+                                                }
+
                                                 const parsedValue = parseInt(value)
                                                     ? parseInt(value)
                                                     : value;
@@ -210,6 +231,9 @@ const PluridsheetPlane: React.FC<PluridsheetPlaneProperties> = (
                                                     x: row,
                                                     value: parsedValue,
                                                 });
+                                            }}
+                                            selectCell={() => {
+                                                console.log('cellName', cellName);
                                             }}
                                         />
                                     );
